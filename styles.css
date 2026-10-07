@@ -1,0 +1,304 @@
+/* ============================================================
+   Білети та відповіді — Режим 1
+   Простий, чистий інтерфейс без анімацій і зовнішніх бібліотек.
+   ============================================================ */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1f2328;
+  background: #f2f4f7;
+}
+
+/* ---------- Верхня панель із перемикачем режиму ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #d7dbe0;
+}
+
+.mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mode__label {
+  font-size: 13px;
+  color: #4a5259;
+}
+
+/* Ширина списку — не більше 150 px */
+.mode__select {
+  width: 150px;
+  max-width: 150px;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 14px;
+  color: #1f2328;
+  background: #fff;
+  border: 1px solid #c3c9d0;
+  border-radius: 4px;
+}
+
+.mode__note {
+  font-size: 13px;
+  color: #8a5a00;
+  background: #fff6e0;
+  border: 1px solid #f0d69a;
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+/* ---------- Загальний каркас ---------- */
+
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #d7dbe0;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+
+.card--search {
+  /* Блок 2 не повинен розтягувати сторінку */
+  overflow: hidden;
+}
+
+.card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card__title {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2328;
+}
+
+.card__head .card__title {
+  margin-bottom: 10px;
+}
+
+/* ---------- Рядки вводу ---------- */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.row__label {
+  font-size: 14px;
+  color: #4a5259;
+}
+
+.row__input {
+  width: 90px;
+  padding: 6px 8px;
+  font: inherit;
+  color: #1f2328;
+  background: #fff;
+  border: 1px solid #c3c9d0;
+  border-radius: 4px;
+}
+
+.row__input--wide {
+  width: 100%;
+  max-width: 460px;
+  flex: 1 1 240px;
+}
+
+.row__input:focus,
+.mode__select:focus {
+  outline: 2px solid #3b7ddd;
+  outline-offset: 1px;
+  border-color: #3b7ddd;
+}
+
+/* ---------- Кнопки ---------- */
+
+.btn {
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 14px;
+  color: #fff;
+  background: #3b7ddd;
+  border: 1px solid #3b7ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover { background: #346fc7; border-color: #346fc7; }
+
+.btn:active { background: #2d61ae; border-color: #2d61ae; }
+
+.btn:focus-visible {
+  outline: 2px solid #1f2328;
+  outline-offset: 2px;
+}
+
+.btn--ghost {
+  color: #b02a2a;
+  background: #fff;
+  border-color: #d9a2a2;
+}
+
+.btn--ghost:hover { background: #fdf1f1; border-color: #c98080; }
+
+/* ---------- Повідомлення ---------- */
+
+.msg {
+  margin: 10px 0 0;
+  font-size: 14px;
+}
+
+.msg--error { color: #b02a2a; }
+
+.msg--empty { color: #6b737a; }
+
+.msg--sync {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #6b737a;
+}
+
+/* ---------- Блок 2: результати пошуку ---------- */
+
+.results {
+  margin-top: 10px;
+  /* Фіксована максимальна висота — 20% висоти вікна */
+  max-height: 20vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #e2e6ea;
+  border-radius: 4px;
+  background: #fbfcfd;
+}
+
+.results:empty { display: none; }
+
+.results__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 14px;
+  color: #1f2328;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #edf0f3;
+  cursor: pointer;
+}
+
+.results__item:last-child { border-bottom: 0; }
+
+.results__item:hover { background: #eef4fd; }
+
+.results__item:focus-visible {
+  outline: 2px solid #3b7ddd;
+  outline-offset: -2px;
+}
+
+.results__meta {
+  color: #6b737a;
+  font-size: 12px;
+  margin-right: 6px;
+}
+
+.results__note {
+  padding: 8px 10px;
+  font-size: 14px;
+  color: #6b737a;
+}
+
+/* ---------- Блок 3: результат ---------- */
+
+.output {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Група — це один білет або одне знайдене питання.
+   Роздільник між НАБОРАМИ: червона смуга 3 px.
+   Він стоїть на межі сусідніх груп, тому між питаннями одного білета
+   жодних смуг немає (вони всередині однієї групи). */
+.output__group {
+  padding: 12px 0;
+  border-top: 3px solid #d32020;
+}
+
+.output__group:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.output__group-title {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b737a;
+}
+
+.output__item + .output__item { margin-top: 16px; }
+
+/* Питання — синє й жирне */
+.output__question {
+  margin: 0;
+  font-weight: 700;
+  color: #1055c4;
+  white-space: pre-wrap;
+}
+
+/* Відступ між питанням і відповіддю ~10 px */
+.output__answer {
+  margin: 10px 0 0;
+  font-weight: 400;
+  color: #1f2328;
+  white-space: pre-wrap;
+}
+
+/* ---------- Вузькі екрани ---------- */
+
+@media (max-width: 620px) {
+  .row__input--wide { max-width: none; }
+  .card__head { flex-wrap: wrap; }
+}
+
+/* ---------- Режим 2: лише перегляд синхронізованого результату ---------- */
+
+body.mode-2 .card--edit { display: none; }
+
+body.mode-2 #clear-btn { display: none; }
+
+body.mode-1 .viewer-only { display: none; }
